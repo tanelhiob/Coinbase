@@ -53,7 +53,7 @@ let printTransaction (t: TransactionsProvider.Datum) =
         (t.NativeAmount.Amount / t.Amount.Amount)
 
 let printAccountTransactions (account: AccountsProvider.Datum) (transactions: TransactionsProvider.Datum array) =
-    let coin =  account.Currency.Code
+    let coin =  account.Balance.Currency
     let coinPrice = coinPrices |> List.find (fun (c, _) -> c = coin) |> snd
     let accountValue = account.Balance.Amount * coinPrice
     printfn "%s %f %s (%.2f€) %s = %.2f€" account.Name account.Balance.Amount account.Balance.Currency accountValue coin coinPrice
@@ -84,7 +84,7 @@ let printAccountTransactions (account: AccountsProvider.Datum) (transactions: Tr
     profit
 
 accountTransactions
-|> Array.filter (fun (a, _) -> interestingCoins |> List.contains a.Currency.Code)
+|> Array.filter (fun (a, _) -> interestingCoins |> List.contains a.Balance.Currency)
 |> Array.map (fun (a, t) -> printAccountTransactions a t)
 |> Array.sum
 |> printfn "Total profit %.2f"
